@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Case Converter</title>
+
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-size: 10px;
+				font-family: sans-serif;
+			}
+
+			.title__heading {
+				font-size: 4rem;
+			}
+
+			.main-container {
+				padding: 1.5rem;
+				display: flex;
+				flex-direction: column;
+				gap: 1.2rem;
+			}
+
+			.text {
+				width: 30vw;
+				height: 30vh;
+			}
+
+			.button-container {
+				display: flex;
+				gap: 1.2rem;
+			}
+
+			.button {
+				font-size: 1.1rem;
+				font-weight: 500;
+				color: #333;
+				background-color: rgb(92, 218, 170);
+				border: none;
+				border-radius: 5px;
+				padding: 0.4rem 0.4rem;
+			}
+
+			.button:hover {
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main-container">
+			<div class="title title__heading">Case Converter</div>
+			<textarea id="text" class="text" placeholder="Input your text here..."></textarea>
+			<div class="button-container">
+				<button id="upper-case" class="button">Upper Case</button>
+				<button id="lower-case" class="button">Lower Case</button>
+				<button id="proper-case" class="button">Proper Case</button>
+				<button id="sentence-case" class="button">Sentence Case</button>
+				<button id="save-text-file" class="button">Save</button>
+			</div>
+		</div>
+
+		<script>
+
+			const textArea = document.querySelector('.text');
+			const buttonUpper = document.querySelector('#upper-case');
+			const buttonLower = document.querySelector('#lower-case');
+			const buttonProper = document.querySelector('#proper-case');
+			const buttonSentence = document.querySelector('#sentence-case');
+			const buttonSave = document.querySelector('#save-text-file');
+
+			buttonUpper.addEventListener('click', transformUppercase);
+			buttonLower.addEventListener('click', transformLowercase);
+			buttonProper.addEventListener('click', transformProperCase);
+			buttonSentence.addEventListener('click', transformSentenceCase);
+			buttonSave.addEventListener('click', saveFile);
+
+			function transformUppercase() {
+				textArea.value = textArea.value.toUpperCase();
+			}
+
+			function transformLowercase() {
+				textArea.value = textArea.value.toLowerCase();
+			}
+
+			function transformProperCase() {
+				let words = textArea.value.split(/\s+/);
+				let transformedWords = [];
+
+				for (let i = 0; i < words.length; i++) {
+					transformedWords.push(words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase());
+				}
+
+				textArea.value = transformedWords.join(" ");
+			}
+
+			function transformSentenceCase() {
+				let sentences = textArea.value.trim().split(/\.\s+/);
+				let transformedSentences = [];
+
+				for (let i = 0; i < sentences.length; i++) {
+					if(sentences[i]) {
+						transformedSentences.push(sentences[i].charAt(0).toUpperCase() + sentences[i].slice(1).toLowerCase());
+					}
+				}
+
+				textArea.value = transformedSentences.join(". ");
+			}
+
+			function saveFile() {
+				download("hello.txt", textArea.value);
+			}
+
+			function download(filename, text) {
+				let element = document.createElement('a');
+				element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+				element.setAttribute('download', filename);
+
+				element.style.display = 'none';
+				document.body.appendChild(element);
+
+				element.click();
+
+				document.body.removeChild(element);
+			}
+
+		</script>
+	</body>
+</html>
